@@ -1,7 +1,7 @@
 export default function Calculate(current, operand, number) {
-  current = parseInt(current);
+  current = parseFloat(current);
   console.log(current);
-  number = parseInt(number);
+  number = parseFloat(number);
   console.log(number);
   console.log(operand);
   if (operand === "Add") {

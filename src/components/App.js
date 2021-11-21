@@ -3,6 +3,7 @@ import Display from "./Display";
 import { useState } from "react";
 import Calculate from "../globals/calculate";
 function App() {
+  const [memory, setMemory] = useState("empty");
   const [current, setCurrent] = useState("0");
   const [operand, setOperand] = useState("");
   const [number, setNumber] = useState("start");
@@ -11,24 +12,75 @@ function App() {
       setCurrent(`${value}`);
     } else if (operand === "" && type === "number") {
       setCurrent(current + `${value}`);
-    } else if (type === "operator") {
-      setOperand(value);
     } else if (operand !== "" && number !== "start" && type === "number") {
       setNumber(number + `${value}`);
     } else if (operand !== "" && type === "number") {
       setNumber(`${value}`);
     } else if (type === "enter" && operand !== "") {
-      setCurrent(Calculate(current, operand, number));
+      setCurrent(`${Calculate(current, operand, number)}`);
       setOperand("");
       setNumber("start");
+    } else if (type === "operator") {
+      if (number === "start") {
+        setOperand(value);
+      } else {
+        setCurrent(`${Calculate(current, operand, number)}`);
+        setOperand(value);
+        setNumber("start");
+      }
     } else if (type === "clear" && value === "Clear") {
-      setNumber("0");
+      if (operand === "") {
+        setCurrent("0");
+      } else {
+        setNumber("start");
+      }
     } else if (type === "clear" && value === "All Clear") {
       setCurrent("0");
       setOperand("");
       setNumber("start");
+    } else if (type === "memory" && value === "Memory Save") {
+      if (number === "start") {
+        setMemory(`${current}`);
+      } else {
+        setMemory(`${number}`);
+      }
+    } else if (type === "memory" && value === "Memory Clear") {
+      setMemory("empty");
+    } else if (type === "memory" && value === "Memory Recall") {
+      if (operand === "") {
+        setCurrent(memory);
+      } else {
+        setNumber(memory);
+      }
+    } else if (type === "memory" && value === "Memory Addition") {
+      setMemory(`${Calculate(memory, "Add", current)}`);
+    } else if (type === "memory" && value === "Memory Subtract") {
+      setMemory(`${Calculate(memory, "Subtract", current)}`);
+    } else if (type === "decimal") {
+      if (operand !== "" && number !== "start" && number.indexOf(value) < 0) {
+        setNumber(number + value);
+      } else if (current.indexOf(value) < 0) {
+        setCurrent(current + value);
+      }
+    } else if (type === "sign") {
+      if (operand === "") {
+        if (current[0] === "-") {
+          setCurrent(`${Calculate(current, "Multiply", "-1")}`);
+        } else {
+          setCurrent("-" + current);
+        }
+      } else {
+        if (number[0] === "-") {
+          setNumber(`${Calculate(number, "Multiply", "-1")}`);
+        } else {
+          if (number === "start") {
+            setNumber("-0");
+          } else {
+            setNumber("-" + number);
+          }
+        }
+      }
     }
-    console.log(number);
   }
   return (
     <div className="wrapper">
