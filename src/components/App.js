@@ -20,6 +20,12 @@ function App() {
       setCurrent(`${Calculate(current, operand, number)}`);
       setOperand("");
       setNumber("start");
+    } else if (value === "Percent") {
+      setCurrent(Calculate(current, "Divide", "100"));
+      setOperand("Multiply");
+      setNumber("start");
+    } else if (value === "Square Root") {
+      setCurrent(Calculate(current, value, "0"));
     } else if (type === "operator") {
       if (number === "start") {
         setOperand(value);
@@ -28,31 +34,31 @@ function App() {
         setOperand(value);
         setNumber("start");
       }
-    } else if (type === "clear" && value === "Clear") {
+    } else if (value === "Clear") {
       if (operand === "") {
         setCurrent("0");
       } else {
         setNumber("start");
       }
-    } else if (type === "clear" && value === "All Clear") {
+    } else if (value === "All Clear") {
       setCurrent("0");
       setOperand("");
       setNumber("start");
-    } else if (type === "memory" && value === "Memory Save") {
+    } else if (value === "Memory Save") {
       if (number === "start") {
         setMemory(`${current}`);
       } else {
         setMemory(`${number}`);
       }
-    } else if (type === "memory" && value === "Memory Clear") {
+    } else if (value === "Memory Clear") {
       setMemory("empty");
-    } else if (type === "memory" && value === "Memory Recall") {
+    } else if (value === "Memory Recall") {
       if (operand === "") {
         setCurrent(memory);
       } else {
         setNumber(memory);
       }
-    } else if (type === "memory" && value === "Memory Addition") {
+    } else if (value === "Memory Addition") {
       setMemory(`${Calculate(memory, "Add", current)}`);
     } else if (type === "memory" && value === "Memory Subtract") {
       setMemory(`${Calculate(memory, "Subtract", current)}`);
